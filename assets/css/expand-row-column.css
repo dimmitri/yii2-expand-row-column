@@ -1,0 +1,10 @@
+*[class^="expand-row-column"] {
+    text-decoration: none;
+    border-bottom: dashed 1px #08C;
+    cursor: pointer;
+    color: #08C;
+}
+
+tr[id^="expand-row-column-detail"] {
+    border-left: 5px solid #08C;
+}

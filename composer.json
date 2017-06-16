@@ -1,0 +1,25 @@
+{
+    "name": "dimmitri/yii2-expand-row-column",
+    "description": "Expand row column for the Yii 2.0 GridView widget.",
+    "keywords": [
+        "yii2",
+        "widget",
+        "grid"
+    ],
+    "type": "yii2-extension",
+    "homepage": "https://github.com/dimmitri/yii2-expand-row-column",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/dimmitri/yii2-expand-row-column/issues",
+        "source": "https://github.com/dimmitri/yii2-expand-row-column"
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "~2.0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "dimmitri\\grid\\": ""
+        }
+    }
+}

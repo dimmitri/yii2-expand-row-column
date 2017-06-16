@@ -1,0 +1,6 @@
+# dev tools
+/.idea
+/nbproject
+
+# global include
+vendor
