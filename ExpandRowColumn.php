@@ -236,7 +236,9 @@ JS;
             } else {
                 $value = call_user_func($value, $model, $key, $index, $this);
             }
-            return $this->grid->formatter->format($value, $this->format);
+            if (!empty($value)) {
+                return $this->grid->formatter->format($value, $this->format);
+            }
         }
         return null;
     }
