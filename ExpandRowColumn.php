@@ -72,6 +72,11 @@ class ExpandRowColumn extends DataColumn
     public $afterValue;
 
     /**
+     * @var string|Closure the text before the expandable element.
+     */
+    public $beforeValue;
+
+    /**
      * @var bool whether to use the default theme
      */
     public $useDefaultTheme = true;
@@ -93,7 +98,7 @@ class ExpandRowColumn extends DataColumn
             $this->url = Yii::$app->getRequest()->getUrl();
         }
 
-        $this->registerJs();
+        $this->registerClientScript();
     }
 
     /**
@@ -107,6 +112,39 @@ class ExpandRowColumn extends DataColumn
     {
         $options = $this->getArrayOfOptions($this->contentOptions, $model, $key, $index);
 
+        return Html::beginTag('td', $options)
+            . $this->getInnerContent($model, $key, $index)
+            . Html::endTag('td');
+    }
+
+    /**
+     * @param mixed $model
+     * @param mixed $key
+     * @param int $index
+     * @return string
+     */
+    protected function getInnerContent($model, $key, $index)
+    {
+        $expandableText = $this->renderDataCellContent($model, $key, $index);
+        if (empty($expandableText) || $expandableText === $this->grid->formatter->nullDisplay) {
+            return $expandableText;
+        }
+
+        return $this->getContentAroundExpandableElement($this->beforeValue, $model, $key, $index)
+            . Html::beginTag('span', $this->getExpandableOptions($model, $key, $index))
+            . $expandableText
+            . Html::endTag('span')
+            . $this->getContentAroundExpandableElement($this->afterValue, $model, $key, $index);
+    }
+
+    /**
+     * @param mixed $model
+     * @param mixed $key
+     * @param int $index
+     * @return array
+     */
+    protected function getExpandableOptions($model, $key, $index)
+    {
         $expandableOptions = $this->getArrayOfOptions($this->expandableOptions, $model, $key, $index);
         $expandableOptions['data-row_id'] = $key;
         $expandableOptions['data-col_id'] = $this->grid->id . '-' . $this->getColumnID();
@@ -117,16 +155,13 @@ class ExpandRowColumn extends DataColumn
             $info = call_user_func($this->submitData, $model, $key, $index);
             $expandableOptions['data-info'] = Json::encode((array)$info);
         }
-
-        return Html::beginTag('td', $options)
-            . Html::beginTag('span', $expandableOptions)
-            . $this->renderDataCellContent($model, $key, $index)
-            . Html::endTag('span')
-            . $this->getDataCellAfterValue($model, $key, $index)
-            . Html::endTag('td');
+        return $expandableOptions;
     }
 
-    public function registerJs()
+    /**
+     * Registers the needed JavaScript
+     */
+    public function registerClientScript()
     {
         if (Yii::$app->request->isAjax) {
             return;
@@ -142,7 +177,7 @@ class ExpandRowColumn extends DataColumn
         ]);
 
         $js = <<<JS
-$(document).on('click', '#{$this->grid->id} .{$this->getExpandableElementClass()}', function() {
+jQuery(document).on('click', '#{$this->grid->id} .{$this->getExpandableElementClass()}', function() {
     var row = new ExpandRow({$clientOptions});
     row.run($(this));
 });
@@ -173,9 +208,9 @@ JS;
 
     /**
      * @param $options
-     * @param $model
-     * @param $key
-     * @param $index
+     * @param mixed $model
+     * @param mixed $key
+     * @param int $index
      * @return array
      */
     protected function getArrayOfOptions($options, $model, $key, $index)
@@ -187,18 +222,19 @@ JS;
     }
 
     /**
+     * @param string|Closure $value
      * @param mixed $model
      * @param mixed $key
      * @param int $index
      * @return null|string
      */
-    public function getDataCellAfterValue($model, $key, $index)
+    protected function getContentAroundExpandableElement($value, $model, $key, $index)
     {
-        if ($this->afterValue !== null) {
-            if (is_string($this->afterValue)) {
-                $value = ArrayHelper::getValue($model, $this->afterValue);
+        if ($value !== null) {
+            if (is_string($value)) {
+                $value = ArrayHelper::getValue($model, $value);
             } else {
-                $value = call_user_func($this->afterValue, $model, $key, $index, $this);
+                $value = call_user_func($value, $model, $key, $index, $this);
             }
             return $this->grid->formatter->format($value, $this->format);
         }

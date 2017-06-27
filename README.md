@@ -1,3 +1,21 @@
+# Expand row column for Yii2
+Displays a clickable column that will make an ajax request and display its resulting data into a new row.
+
+## Installation
+
+The preferred way to install this extension is through composer.
+
+Either run
+```
+php composer.phar require --prefer-dist dimmitri/yii2-expand-row-column "~1.0.0"
+```
+or add
+```
+"dimmitri/yii2-expand-row-column": "~1.0.0"
+```
+to the require section of your composer.json file.
+
+## Usage
 
 ```php
 
@@ -80,7 +98,7 @@ public function actionDetail($id, $advanced = false)
     }
 ```
 
-view/detail.php:
+view/_detail.php:
 ```php
 use yii\grid\GridView;
 use yii\widgets\Pjax;
