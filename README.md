@@ -1,22 +1,23 @@
-# Expand row column for Yii2
+# Expand row column for the Yii 2.0 GridView widget
 Displays a clickable column that will make an ajax request and display its resulting data into a new row.
 
 ## Installation
 
-The preferred way to install this extension is through composer.
+The preferred way to install this extension is through [composer](https://getcomposer.org/download/).
 
 Either run
 ```
-php composer.phar require --prefer-dist dimmitri/yii2-expand-row-column "~1.0.0"
+php composer.phar require --prefer-dist dimmitri/yii2-expand-row-column "*"
 ```
 or add
 ```
-"dimmitri/yii2-expand-row-column": "~1.0.0"
+"dimmitri/yii2-expand-row-column": "*"
 ```
-to the require section of your composer.json file.
+to the require section of your ```composer.json``` file.
 
 ## Usage
 
+view/index.php:
 ```php
 
 use dimmitri\grid\ExpandRowColumn;
@@ -70,32 +71,32 @@ use yii\helpers\Url;
 Actions:
 ```php
 public function actionIndex()
-    {
-        $searchModel = new ModelSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-//      The key (or keyField) must be filled, if the key is not equal to 'id'.        
-        $dataProvider->key = 'uuid';// for ActiveDataProvider 
-//        $dataProvider->keyField = 'uuid';// for ArrayDataProvider 
+{
+    $searchModel = new ModelSearch();
+    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//  The key (or keyField) must be filled, if the key is not equal to 'id'.        
+    $dataProvider->key = 'uuid';// for ActiveDataProvider 
+//  $dataProvider->keyField = 'uuid';// for ArrayDataProvider 
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+    return $this->render('index', [
+        'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
+    ]);
+}
     
 public function actionDetail($id, $advanced = false)
-    {
-        $model = $this->findModel($id);
+{
+    $model = $this->findModel($id);
 
-        $dataProvider = new ArrayDataProvider([
-            'allModels' => $model->events,
-        ]);
+    $dataProvider = new ArrayDataProvider([
+        'allModels' => $model->events,
+    ]);
 
-        return $this->renderAjax('_detail', [
-            'dataProvider' => $dataProvider,
-            'advanced' => $advanced,
-        ]);
-    }
+    return $this->renderAjax('_detail', [
+        'dataProvider' => $dataProvider,
+        'advanced' => $advanced,
+    ]);
+}
 ```
 
 view/_detail.php:
