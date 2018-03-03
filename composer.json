@@ -14,7 +14,7 @@
         "source": "https://github.com/dimmitri/yii2-expand-row-column"
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.0",
         "yiisoft/yii2": "~2.0.1"
     },
     "autoload": {

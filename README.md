@@ -22,52 +22,56 @@ to the require section of your ```composer.json``` file.
 view/index.php:
 ```php
 
+<?php
 use dimmitri\grid\ExpandRowColumn;
+use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\grid\SerialColumn;
 use yii\helpers\Html;
 use yii\helpers\Url;
+?>
 
 <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            // simple example
-            [
-                'class' => ExpandRowColumn::class,
-                'attribute' => 'name',
-                'url' => Url::to(['info']),
-            ],
-            // advanced example
-            [
-                'class' => ExpandRowColumn::class,
-                'attribute' => 'status_id',
-                'ajaxErrorMessage' => 'Oops',
-                'ajaxMethod' => 'GET',
-                'url' => Url::to(['detail']),
-                'submitData' => function ($model, $key, $index) {
-                    return ['id' => $model->status_id, 'advanced' => true];
-                },
-                'enableCache' => false,
-                'afterValue' => function ($model, $key, $index) {
-                    return ' ' . Html::a(
-                        Html::tag('span', '', ['class' => 'glyphicon glyphicon-download', 'aria-hidden' => 'true']),
-                        ['csv', 'ref' => $model->status_id],
-                        ['title' => 'Download event history in csv format.']
-                    );
-                },
-                'format' => 'raw',
-                'expandableOptions' => [
-                    'title' => 'Click me!',
-                    'class' => 'my-expand',
-                ],
-                'contentOptions' => [
-                    'style' => 'display: flex; justify-content: space-between;',
-                ],
-            ],
-            ['class' => 'yii\grid\ActionColumn'],
+    'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
+    'columns' => [
+        ['class' => SerialColumn::class],
+        // simple example
+        [
+            'class' => ExpandRowColumn::class,
+            'attribute' => 'name',
+            'url' => Url::to(['info']),
         ],
-    ]) ?>
+        // advanced example
+        [
+            'class' => ExpandRowColumn::class,
+            'attribute' => 'status_id',
+            'ajaxErrorMessage' => 'Oops',
+            'ajaxMethod' => 'GET',
+            'url' => Url::to(['detail']),
+            'submitData' => function ($model, $key, $index) {
+                return ['id' => $model->status_id, 'advanced' => true];
+            },
+            'enableCache' => false,
+            'afterValue' => function ($model, $key, $index) {
+                return ' ' . Html::a(
+                    Html::tag('span', '', ['class' => 'glyphicon glyphicon-download', 'aria-hidden' => 'true']),
+                    ['csv', 'ref' => $model->status_id],
+                    ['title' => 'Download event history in csv format.']
+                );
+            },
+            'format' => 'raw',
+            'expandableOptions' => [
+                'title' => 'Click me!',
+                'class' => 'my-expand',
+            ],
+            'contentOptions' => [
+                'style' => 'display: flex; justify-content: space-between;',
+            ],
+        ],
+        ['class' => ActionColumn::class],
+    ],
+]) ?>
 ```
 
 Actions:
@@ -103,8 +107,11 @@ public function actionDetail($id, $advanced = false)
 
 view/_detail.php:
 ```php
+
+<?php
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+?>
 
 <?php Pjax::begin(); ?>
 
@@ -114,4 +121,3 @@ use yii\widgets\Pjax;
 
 <?php Pjax::end(); ?>
 ```
-
