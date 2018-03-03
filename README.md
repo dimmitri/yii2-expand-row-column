@@ -17,6 +17,8 @@ to the require section of your ```composer.json``` file.
 
 ## Usage
 
+![Example](./resources/expand-row-column.gif?raw=true)
+
 view/index.php:
 ```php
 
@@ -32,13 +34,13 @@ use yii\helpers\Url;
             ['class' => 'yii\grid\SerialColumn'],
             // simple example
             [
-                'class' => ExpandRowColumn::className(),
+                'class' => ExpandRowColumn::class,
                 'attribute' => 'name',
                 'url' => Url::to(['info']),
             ],
             // advanced example
             [
-                'class' => ExpandRowColumn::className(),
+                'class' => ExpandRowColumn::class,
                 'attribute' => 'status_id',
                 'ajaxErrorMessage' => 'Oops',
                 'ajaxMethod' => 'GET',
@@ -74,7 +76,7 @@ public function actionIndex()
 {
     $searchModel = new ModelSearch();
     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-//  The key (or keyField) must be filled, if the key is not equal to 'id'.        
+//  The key (or keyField) must be filled, if the key is not equal to primary key.        
     $dataProvider->key = 'uuid';// for ActiveDataProvider 
 //  $dataProvider->keyField = 'uuid';// for ArrayDataProvider 
 

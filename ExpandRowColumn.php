@@ -33,7 +33,7 @@ class ExpandRowColumn extends DataColumn
     public $url;
 
     /**
-     * @var array|\Closure the HTML attributes for the expandable element
+     * @var array|Closure the HTML attributes for the expandable element
      */
     public $expandableOptions = [];
 
@@ -82,7 +82,7 @@ class ExpandRowColumn extends DataColumn
     public $useDefaultTheme = true;
 
     /**
-     * Initializes the object.
+     * @inheritdoc
      */
     public function init()
     {
@@ -102,11 +102,7 @@ class ExpandRowColumn extends DataColumn
     }
 
     /**
-     * Renders a data cell.
-     * @param mixed $model the data model being rendered
-     * @param mixed $key the key associated with the data model
-     * @param int $index the zero-based index of the data item among the item array returned by [[GridView::dataProvider]].
-     * @return string the rendering result
+     * @inheritdoc
      */
     public function renderDataCell($model, $key, $index)
     {
@@ -121,6 +117,7 @@ class ExpandRowColumn extends DataColumn
      * @param mixed $model
      * @param mixed $key
      * @param int $index
+     *
      * @return string
      */
     protected function getInnerContent($model, $key, $index)
@@ -141,13 +138,14 @@ class ExpandRowColumn extends DataColumn
      * @param mixed $model
      * @param mixed $key
      * @param int $index
+     *
      * @return array
      */
     protected function getExpandableOptions($model, $key, $index)
     {
         $expandableOptions = $this->getArrayOfOptions($this->expandableOptions, $model, $key, $index);
         $expandableOptions['data-row_id'] = $key;
-        $expandableOptions['data-col_id'] = $this->grid->id . '-' . $this->getColumnID();
+        $expandableOptions['data-col_id'] = $this->grid->getId() . '-' . $this->getColumnID();
         $expandableOptions['class'] = $this->getExpandableElementClass()
             . (isset($expandableOptions['class']) ? " {$expandableOptions['class']}" : '');
 
@@ -155,15 +153,16 @@ class ExpandRowColumn extends DataColumn
             $info = call_user_func($this->submitData, $model, $key, $index);
             $expandableOptions['data-info'] = Json::encode((array)$info);
         }
+
         return $expandableOptions;
     }
 
     /**
      * Registers the needed JavaScript
      */
-    public function registerClientScript()
+    protected function registerClientScript()
     {
-        if (Yii::$app->request->isAjax) {
+        if (Yii::$app->getRequest()->getIsAjax()) {
             return;
         }
 
@@ -177,7 +176,7 @@ class ExpandRowColumn extends DataColumn
         ]);
 
         $js = <<<JS
-jQuery(document).on('click', '#{$this->grid->id} .{$this->getExpandableElementClass()}', function() {
+jQuery(document).on('click', '#{$this->grid->getId()} .{$this->getExpandableElementClass()}', function() {
     var row = new ExpandRow({$clientOptions});
     row.run($(this));
 });
@@ -195,6 +194,7 @@ JS;
         if (empty($this->_columnID)) {
             $this->_columnID = md5(VarDumper::dumpAsString(get_object_vars($this), 5));
         }
+
         return $this->_columnID;
     }
 
@@ -211,6 +211,7 @@ JS;
      * @param mixed $model
      * @param mixed $key
      * @param int $index
+     *
      * @return array
      */
     protected function getArrayOfOptions($options, $model, $key, $index)
@@ -218,6 +219,7 @@ JS;
         if ($options instanceof Closure) {
             $options = call_user_func($options, $model, $key, $index, $this);
         }
+
         return (array)$options;
     }
 
@@ -226,7 +228,8 @@ JS;
      * @param mixed $model
      * @param mixed $key
      * @param int $index
-     * @return null|string
+     *
+     * @return string|null
      */
     protected function getContentAroundExpandableElement($value, $model, $key, $index)
     {
@@ -240,6 +243,7 @@ JS;
                 return $this->grid->formatter->format($value, $this->format);
             }
         }
+
         return null;
     }
 }

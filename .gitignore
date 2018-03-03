@@ -4,3 +4,5 @@
 
 # global include
 vendor
+
+composer.lock
