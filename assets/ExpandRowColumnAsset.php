@@ -9,7 +9,7 @@ class ExpandRowColumnAsset extends AssetBundle
     public $sourcePath = '@dimmitri/grid/assets';
 
     public $js = [
-        'js/expand-row-column.js',
+        YII_DEBUG ? 'js/expand-row-column.js' : 'js/expand-row-column.min.js',
     ];
 
     public $depends = [
