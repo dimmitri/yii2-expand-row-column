@@ -101,6 +101,7 @@ public function actionDetail($id, $advanced = false)
     return $this->renderAjax('_detail', [
         'dataProvider' => $dataProvider,
         'advanced' => $advanced,
+        'id' => $id,
     ]);
 }
 ```
@@ -113,7 +114,7 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 ?>
 
-<?php Pjax::begin(); ?>
+<?php Pjax::begin(['id' => "pjax-{$id}", 'enablePushState' => false]); ?>
 
 <?= GridView::widget([
     // ....
