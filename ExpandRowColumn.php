@@ -82,6 +82,16 @@ class ExpandRowColumn extends DataColumn
     public $useDefaultTheme = true;
 
     /**
+     * @var string
+     */
+    public $hideEffect = 'slideUp';
+
+    /**
+     * @var string
+     */
+    public $showEffect = 'slideDown';
+
+    /**
      * @inheritdoc
      */
     public function init()
@@ -173,6 +183,8 @@ class ExpandRowColumn extends DataColumn
             'countColumns' => count($this->grid->columns),
             'enableCache' => (bool)$this->enableCache,
             'loadingIcon' => $this->loadingIcon,
+            'hideEffect' => $this->hideEffect,
+            'showEffect' => $this->showEffect,
         ]);
 
         $js = <<<JS
