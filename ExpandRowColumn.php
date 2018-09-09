@@ -154,17 +154,33 @@ class ExpandRowColumn extends DataColumn
     protected function getExpandableOptions($model, $key, $index)
     {
         $expandableOptions = $this->getArrayOfOptions($this->expandableOptions, $model, $key, $index);
-        $expandableOptions['data-row_id'] = $key;
+        $expandableOptions['data-row_id'] = $this->normalizeRowID($key);
         $expandableOptions['data-col_id'] = $this->grid->getId() . '-' . $this->getColumnID();
         $expandableOptions['class'] = $this->getExpandableElementClass()
             . (isset($expandableOptions['class']) ? " {$expandableOptions['class']}" : '');
 
         if ($this->submitData instanceof Closure) {
             $info = call_user_func($this->submitData, $model, $key, $index);
-            $expandableOptions['data-info'] = Json::encode((array)$info);
+            $expandableOptions['data-info'] = (array)$info;
+        } else {
+            $expandableOptions['data-info'] = is_array($key) ? $key : ['id' => $key];
         }
 
         return $expandableOptions;
+    }
+
+    /**
+     * @param $rowID
+     *
+     * @return string
+     */
+    protected function normalizeRowID($rowID)
+    {
+        if (is_array($rowID)) {
+            $rowID = implode('', $rowID);
+        }
+
+        return trim(preg_replace("|[^\d\w]+|iu", '', $rowID));
     }
 
     /**

@@ -70,7 +70,7 @@ var ExpandRow = function (options) {
         $.ajax({
             url: ajaxUrl,
             method: ajaxMethod,
-            data: ajaxData ? ajaxData : {'id': row_id},
+            data: ajaxData,
             success: function (data) {
                 tr.find('td').html(data);
             },
