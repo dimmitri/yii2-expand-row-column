@@ -25,7 +25,7 @@ class ExpandRowColumn extends DataColumn
     /**
      * @var string unique identifier of column
      */
-    private $_columnID;
+    public $column_id;
 
     /**
      * @var string the route to call via AJAX to get the data from
@@ -155,7 +155,7 @@ class ExpandRowColumn extends DataColumn
     {
         $expandableOptions = $this->getArrayOfOptions($this->expandableOptions, $model, $key, $index);
         $expandableOptions['data-row_id'] = $this->normalizeRowID($key);
-        $expandableOptions['data-col_id'] = $this->grid->getId() . '-' . $this->getColumnID();
+        $expandableOptions['data-col_id'] = $this->getColumnID();
         $expandableOptions['class'] = $this->getExpandableElementClass()
             . (isset($expandableOptions['class']) ? " {$expandableOptions['class']}" : '');
 
@@ -219,11 +219,11 @@ JS;
      */
     protected function getColumnID()
     {
-        if (empty($this->_columnID)) {
-            $this->_columnID = md5(VarDumper::dumpAsString(get_object_vars($this), 5));
+        if (empty($this->column_id)) {
+            $this->column_id = md5(VarDumper::dumpAsString(get_object_vars($this), 5));
         }
 
-        return $this->_columnID;
+        return $this->column_id;
     }
 
     /**
