@@ -17,6 +17,10 @@ to the require section of your ```composer.json``` file.
 
 ## Usage
 
+> Prior to version 1.0.5, the 'column_id' property was generated automatically.
+  In version 1.0.5, it is now possible to assign the 'column_id' property.
+  Assigning the 'column_id' property is optional, but recommended.
+
 ![Example](./resources/expand-row-column.gif?raw=true)
 
 view/index.php:
@@ -40,12 +44,14 @@ use yii\helpers\Url;
         [
             'class' => ExpandRowColumn::class,
             'attribute' => 'name',
+            'column_id' => 'column-info',
             'url' => Url::to(['info']),
         ],
         // advanced example
         [
             'class' => ExpandRowColumn::class,
             'attribute' => 'status_id',
+            'column_id' => 'column-status',
             'ajaxErrorMessage' => 'Oops',
             'ajaxMethod' => 'GET',
             'url' => Url::to(['detail']),
